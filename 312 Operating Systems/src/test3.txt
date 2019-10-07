@@ -1,0 +1,14 @@
+Name: po Processor
+Total runtime: 100
+Memory: 30
+
+
+I/0 30
+YIELD
+CALCULATE 5
+OUT
+CALCULATE 20
+CALCULATE 45
+I/O 20
+I/O 30
+EXE

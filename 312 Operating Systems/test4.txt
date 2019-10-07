@@ -1,0 +1,15 @@
+Name: lo Processor
+Total runtime: 100
+Memory: 90
+
+
+I/0 90
+CACULATE 80
+I/O 90
+CACULATE 20
+CACULATE 100
+CACULATE 100
+YIELD
+YIELD 
+OUT
+EXE
