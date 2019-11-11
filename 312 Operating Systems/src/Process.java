@@ -1,26 +1,27 @@
 import java.util.*;
 // mixing processblcok and process together  both fucntions fcfs
 public class Process {
-	private String name; 
+	private String name; //file name
 	private ProcessState state;
 	private int pid;
 	private int size;
+	private int totalruntime;
 	private ArrayList<String >fileStorage = new ArrayList<>();
-	private int calculate;
+	//private int calculate;
 	private int memory;
 	private int io;
-	private int runtime;
-	private int currentRuntime;
 	
 	
 	
 	
-	Process(String inputName,int id, int inputSize, int mery, ArrayList<String> x) // stores files
+	
+	Process(String inputName,int id, int total,int mem, ArrayList<String> x) // stores files
 	{
 		this.name=inputName;
 		this.pid=id;
-		this.size=inputSize;
-		this.memory=mery;
+		this.totalruntime=total;
+		this.memory=mem;
+		this.fileStorage=x;
 		this.state= ProcessState.New;
 		
 	}
@@ -42,11 +43,15 @@ public class Process {
 	{
 		return this.pid;
 	}
-	
-	public int getSize()
+	public void setMemory(int x)
 	{
-		return this.size;
+		this.memory=x;
 	}
+	public int getMemory()
+	{
+		return memory;
+	}
+	
 	public void setProcessState(ProcessState x)
 	{
 		this.state=x;
@@ -56,48 +61,48 @@ public class Process {
 		return this.state;
 	}
 	
+	public ArrayList<String> getList()
+	{
+		return fileStorage;
+	}
+	public void removeindex (int i)
+	{
+		fileStorage.remove(i);
+	}
+	public  String getindex(int i)
+	{
+		return fileStorage.get(i);
+	}
 	public String printPCB()
 	{
-		return " Process: " + this.getName() + "Pid: " + this.getPid() + "Size of Process: " + this.getSize() + "Current Process State: " + this.getProcessState() ;
+		return " Process: " + this.getName() + "Pid: " + this.getPid() + "Size of Process: " + this.getTotalTime() + "Current Process State: " + this.getProcessState() ;
 	}
 	
+	public void setIO (int x)
+	{
+		io=x;
+	}
 	
 	public int getIO()
 	{
-		return this.io;
+		return io;
 	}
+	
+	/*public int getIO()
+	{
+		return this.IO;
+	}*/
 	public void setTotalTime(int x)
 	{
-		this.runtime=x;
+		this.totalruntime=x;
 	}
 	public int getTotalTime()
 	{
-		return runtime;
-	}
-	public int getRuntime() // total
-	{
-		return currentRuntime;
+		return totalruntime;
 	}
 	
-	/* 4 commands execpt io b/c fcfs*/
-	public void caculateFCFS() // each i is a word
-	{
-		for(int i=0; i<fileStorage.size(); i++)
-		{
-			if(fileStorage.get(i).equals("Calculate"))
-			{
-				currentRuntime += Integer.parseInt(fileStorage.get(i +1)) ; // converts string to number 
-			}
-		}
-	}
-	/*public void IOFCFS() uneeded fcfs
-	{
-		
-	}*/
-	public void yieldFCFCS()// puts process on wait in scheduler class move to wait queuqe
-	{
-		state=ProcessState.Wait;
-	}
+	
+	
 	public void printpcb() //outputs process block
 	{
 		for(int i=0; i<fileStorage.size(); i++)

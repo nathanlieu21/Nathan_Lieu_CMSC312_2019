@@ -4,41 +4,56 @@ public class FileReader {
 	 
 	public static void main (String [] args) throws Exception
 	{
-		Scanner s = new Scanner(new File("test1.txt"));
-		String name = "";
+		Scanner in = new Scanner(System.in);
+		int fileNum=0;
+		String filename;
 		int runtime= 0; 
 		int memory = 0;
-		int counter =1;
-		ArrayList<String> list = new ArrayList<String>();
-		while (s.hasNext()){
-		    list.add(s.next());
-		}
-		s.close();
-		for(int i=0; i<list.size(); i++)
+		int counter =0;
+		String name = "";
+		int filecounter=0;
+		int x;
+		ArrayList<Process> allfiles = new ArrayList<Process>();
+		System.out.println("How many files do you have");
+		x=in.nextInt();
+		while(filecounter<x) // number of files
 		{
-			System.out.println(list.get(i));
-		}
-		
-		for(int i=0; i<list.size(); i++)
-		{
-			if(list.get(i).equals("Name:"))
-			{
-				name= list.get(i + 1);
+			System.out.println("enter file name");
+			filename=in.nextLine();
+			File file = new File(filename);
+			Scanner s = new Scanner(file);
+			//Scanner s = new Scanner(new File(filename));
+			ArrayList<String> list = new ArrayList<String>();
+			while (s.hasNext()){// takes in all file values
+			    list.add(s.next());
 			}
-			if(list.get(i).equals("runtime:"))
+			for(int i=0; i<list.size(); i++)
 			{
-				runtime=Integer.parseInt(list.get(i+1));
+				if(list.get(i).equals("Name:"))
+				{
+			
+					name= list.get(i + 1);
+					list.remove(i);// removes name 
+					list.remove(i+1);// removes file name
+				}
+				if(list.get(i).equals("Runtime:"))
+				{
+					runtime=Integer.parseInt(list.get(i+1));
+					list.remove(i); //removes runtime
+					list.remove(i+1); //removes runtime value
+				}
+				if(list.get(i).equals("Memory:"))
+				{
+					memory=Integer.parseInt(list.get(i+1));
+					list.remove(i);//removes memory
+					list.remove(i+1); //removes memory value
+				}
 			}
-			if(list.get(i).equals("Memory:"))
-			{
-				memory=Integer.parseInt(list.get(i+1));
-			}
-		}
-		Process p1 = new Process(name,counter,runtime, memory,list);
+			counter++;//pid starts from 1 and goes up
+			Process p = new Process(name,counter,runtime,memory,list);
+			allfiles.add(p);
+			s.close();
 		
-		
-	}
-	
-	
-	// read all files int an array list and store in storage class
+		}	
+	}// default as driver class
 }

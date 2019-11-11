@@ -1,14 +1,33 @@
 import java.util.*;
 public class Scheduler {
 	// three queues always required in scheduler 
-	public ArrayList<Process> readyQueue = new ArrayList<>();
-	public ArrayList<Process> executeQueue = new ArrayList<>();
-	public ArrayList<Process> waitQueue = new ArrayList<>(); // empty b/c first come first serve 
+	public ArrayList<Process> readyQueue = new ArrayList<Process>();
+	public ArrayList<Process> executeQueue = new ArrayList<Process>();
+	public ArrayList<Process> waitQueue = new ArrayList<Process>();// empty b/c first come first serve 
 	
-	//1. update for execute queue
-	//2. all other queues manuel
-	//3. size or inputs of queue
-	public void addRQueue(Process x) // add all files to ready
+	
+	
+	
+	
+	
+
+	// read arraylist into queque 
+
+	public void sort(ArrayList<Process> x) //sorting for shortest job can apply it to the ready queque
+	{
+		Collections.sort(x, new Comparator<Process>()
+				{
+			@Override
+			public int compare(Process a, Process b)
+			{
+				return Integer.compare(a.getTotalTime(), b.getTotalTime()); //sort arraylist in dascending order memory 
+			}
+				});
+		
+		
+	}
+	
+	public void addRQueue(Process x) // adds all
 	{
 		if(x.getProcessState()==ProcessState.New)
 		{
@@ -16,21 +35,74 @@ public class Scheduler {
 			readyQueue.add(x);
 		}
 	}
-	public void addEQueue(Process x)
+	
+	
+	public void execute(Process x)
 	{
 		if(x.getProcessState()==ProcessState.Ready)
 		{
-			executeQueue.add(x);// adds to execute
-			readyQueue.remove(x); // removes from ready queue
-			x.setProcessState(ProcessState.Run);
-			x.caculateFCFS();// caculate
-			if(x.getRuntime()==x.getTotalTime())// runtime over
+			readyQueue.remove(0); // removes from ready queue
+			x.setProcessState(ProcessState.Run); // change state
+			executeQueue.add(x); //add execute queue
+			for(int i=0; i<x.getList().size(); i++) //loop through array
 			{
-				x.setProcessState(ProcessState.Terminate);
-				executeQueue.remove(x);// remove
+				if(x.getindex(i).equals("calculate"))
+				{
+					// runtime =0
+					x.setTotalTime(x.getTotalTime()-Integer.parseInt(x.getindex(i+1))); //gets value - time
+					x.removeindex(i);
+					x.removeindex(i+1);
+				}
+				if(x.getindex(i).equals("I/O")) // wait call
+				{
+					x.setIO(i+1);// gets i/o number
+					waitQueue.add(x); // add wait queue
+					x.setProcessState(ProcessState.Wait); //change state
+					executeQueue.remove(0); //removes from execute
+					x.removeindex(i);
+					x.removeindex(i+1);
+					break;//loop
+					
+				}
+				if(x.getindex(i).equals("Yield"))
+				{
+					//later
+				}
+				if(x.getindex(i).equals("OUT"))
+				{
+					x.printPCB();//pcb
+					x.removeindex(i);
+					
+				}
+				if(x.getindex(i).equals("EXE"))
+				{
+					executeQueue.remove(0);
+					x.setProcessState(ProcessState.Terminate);
+					break;//loop
+				}
+				
 				
 			}
+			
+			/*if(x.getTotalTime()==0)// runtime over
+			{
+				x.setProcessState(ProcessState.Terminate);
+				readyQueue.add(x);
+				
+			}*/
 		}
+		
+	}
+	//driver class three arrays ready ,wait execute , pick next on ready quee for i/o then after i/o doe sort create a private variable for I/0
+	//execute for loop driver 
+	//wont call right i/o
+	//arraylist for i/o stored 
+	public void IOCall (Process x)
+	{
+		readyQueue.remove(0);
+		x.setProcessState(ProcessState.Run);
+		executeQueue.add(x);
+		
 		
 	}
 	public void addWQueue(Process x)
@@ -59,7 +131,6 @@ public class Scheduler {
 		
 	}
 	
-	/* possible get content of process in arrays*/
 	
 
 }
