@@ -88,6 +88,7 @@ public class Scheduler {
 			{
 				x.setProcessState(ProcessState.Terminate);
 				readyQueue.add(x);
+				;
 				
 			}*/
 		}
